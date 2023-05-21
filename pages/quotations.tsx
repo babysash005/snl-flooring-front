@@ -337,25 +337,25 @@ function CheckString(id : string)
     return count;
    }
 
-   function convertToInputJson(formData: FormData): InputJson {
-    return {
-      ATT: formData.ATT,
-      To: formData.To,
-      Date: formData.Date,
-      Total: formData.Total,
-      SubTotal: formData.SubTotal,
-      VAT: formData.VAT,
-      Items: formData.Items.map((item) => ({
-        Description: item.Description,
-        Qty: item.Qty.toString(),
-        UnitPrice: item.UnitPrice,
-        Total: item.Total,
-        GenericId: item.GenericId,
-      })),
-      Id: formData.Id != null ? formData.Id : null,
-      Jobsite: formData.JobSite,
-    };
-  }
+  //  function convertToInputJson(formData: FormData): InputJson {
+  //   return {
+  //     ATT: formData.ATT,
+  //     To: formData.To,
+  //     Date: formData.Date,
+  //     Total: formData.Total,
+  //     SubTotal: formData.SubTotal,
+  //     VAT: formData.VAT,
+  //     Items: formData.Items.map((item) => ({
+  //       Description: item.Description,
+  //       Qty: item.Qty.toString(),
+  //       UnitPrice: item.UnitPrice,
+  //       Total: item.Total,
+  //       GenericId: item.GenericId,
+  //     })),
+  //     Id: formData.Id != null ? formData.Id : null,
+  //     Jobsite: formData.JobSite,
+  //   };
+  // }
  //const  subtotalresult = UpdateSubtotal();
 
   return (

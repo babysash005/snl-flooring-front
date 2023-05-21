@@ -1,12 +1,14 @@
 'use client'
 
-import {  createContext , useContext , Dispatch , SetStateAction , useState , useEffect} from "react";
+import {  createContext , useContext , Dispatch , SetStateAction , useState , useEffect , ReactNode} from "react";
 import axios  from 'axios'
 
 
 axios.defaults.withCredentials = true;
 
-
+interface Props{
+    children? : ReactNode
+}
 
 
 type DataType ={
@@ -38,7 +40,7 @@ const GlobalContext = createContext<ContextProps>(
     }
 )
 
-export const GlobalContextProvide = ({children} :any) =>{
+export const GlobalContextProvide = ({children} : Props) =>{
     const [userid , setUserId] = useState('')
     const [data , setData] = useState<[] | DataType[]>([]);
     const [loggedIn , setLoggedIn] = useState(false)
