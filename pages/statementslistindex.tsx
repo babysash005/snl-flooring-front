@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import PopupReload from '@/components/popupReload';
@@ -10,14 +10,16 @@ interface Value {
   date: string;
   referenceNumber: string;
 }
-
+interface Props {
+  context? : ReactNode
+}
 interface ResponseData {
   statusCodes: string;
   statusMessage: string;
   values: Value[];
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({context} : Props) {
   try {
     const res = await axios.get(
       process.env.NEXT_PUBLIC_API_ENDPOINT + 'api/Statement/api/statement/getallstatements',

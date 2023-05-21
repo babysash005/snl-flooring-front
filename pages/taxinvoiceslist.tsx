@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import axios from 'axios'
 import { useState  } from 'react'
 import { useRouter } from 'next/router'
@@ -13,13 +13,15 @@ interface Value {
     date: string;
     referenceNumber: string;
   }
-
+interface Props {
+  context? : ReactNode
+}
 interface ResponseData {
   statusCodes: string;
   statusMessage: string;
   values: Value[];
 }
-export async function getServerSideProps(context) {
+export async function getServerSideProps({context} : Props) {
   try {
     const res = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/TaxInvoice/api/taxinvoices/gettaxinvoices", { withCredentials: true });
     console.log(res.data);
@@ -47,7 +49,7 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function QuotationsIndex( { values} : ResponseData ) {
+export default function TaxInvoiceIndex( { values} : ResponseData ) {
 
  const [message , setPopUpMessage] = useState("");
  const [routemessage , setRouteMessage] = useState("");
