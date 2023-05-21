@@ -40,6 +40,7 @@ const GlobalContext = createContext<ContextProps>(
     }
 )
 
+
 export const GlobalContextProvide = ({children} : Props) =>{
     const [userid , setUserId] = useState('')
     const [data , setData] = useState<[] | DataType[]>([]);
