@@ -6,6 +6,8 @@ interface Items {
   Qty: number;
   UnitPrice: number;
   Total: number;
+  GenericId: string;
+  Id: number | null;
 }
 
 type PopupProps = {

@@ -53,7 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Layout>
-        {isHomePage && <Home images={carouselProps.images} />}
+        {isHomePage && <Home  />}
         <Component {...pageProps} />
       </Layout>
     </>
