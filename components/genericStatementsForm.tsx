@@ -8,6 +8,8 @@ interface Items {
     InvNo: string;
     Amount: number;
     RecordDate: string;
+    GenericId: string;
+    Id: number | null;
 
 }
 
@@ -20,6 +22,8 @@ interface FormData {
     InvNo: string;
     Amount: number;
     RecordDate: string;
+    GenericId: string;
+    Id: number | null;
 }
 
 export default function GenericStatementTbl({ onClose }: PopupProps) {
@@ -29,6 +33,8 @@ export default function GenericStatementTbl({ onClose }: PopupProps) {
     InvNo: "",
     Amount: 0,
     RecordDate: "",
+    GenericId : "",
+    Id : 0
   });
   const [errormessage, setErrorMessage] = useState(false);
 
@@ -63,6 +69,8 @@ export default function GenericStatementTbl({ onClose }: PopupProps) {
         RecordDate: "",
         Amount: 0,
         InvNo: "",
+        GenericId : "",
+        Id : 0
       });
 
       toggleModal();

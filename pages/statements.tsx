@@ -245,7 +245,7 @@ function CheckString(id : string)
     console.log(formData.Items);
   }
   function UpdateSubtotal(data : Items) {
-    const balanceOutstanding: number = formData.BalanceOutStanding +  parseInt(data.Amount);
+    const balanceOutstanding: number = formData.BalanceOutStanding +  parseInt(data.Amount.toString());
    debugger;
   
     setFormdata((prevFormData) => ({
