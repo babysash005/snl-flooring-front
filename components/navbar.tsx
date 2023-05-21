@@ -72,7 +72,7 @@ export default function NavBar() {
       }
       console.log("Response:", response.data);
     } catch (error) {
-      console.error("Error submitting form:", error.message);
+      console.error("Error submitting form:", error);
     }
   }
 
