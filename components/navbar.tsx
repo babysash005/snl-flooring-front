@@ -138,7 +138,7 @@ export default function NavBar() {
                           role="menu"
                           aria-orientation="vertical"
                           aria-labelledby="dropdownDividerButton"
-                          tabIndex="-1"
+                         
                         >
                           <ul className="py-1">
                             <li>
@@ -216,7 +216,7 @@ export default function NavBar() {
                           role="menu"
                           aria-orientation="vertical"
                           aria-labelledby="dropdownDividerButton"
-                          tabIndex="-1"
+                        
                         >
                           <ul className="py-1">
                             <li>
