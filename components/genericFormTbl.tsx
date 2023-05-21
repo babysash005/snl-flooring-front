@@ -19,6 +19,8 @@ interface FormData {
   Qty: number;
   UnitPrice: number;
   Total: number;
+  GenericId: string;
+  Id: number | null;
 }
 
 export default function GenericFormTbl({ onClose }: PopupProps) {
@@ -28,6 +30,8 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
     Qty: 0,
     UnitPrice: 0,
     Total: 0,
+    GenericId : "",
+    Id : 0
   });
   const [errorMessage, setErrorMessage] = useState(false);
 
@@ -58,6 +62,9 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
         Qty: 0,
         UnitPrice: 0,
         Total: 0,
+        GenericId : "",
+        Id : 0
+
       });
       toggleModal();
     }
