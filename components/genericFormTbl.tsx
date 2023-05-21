@@ -38,8 +38,8 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
     setPopup(!popup);
   };
 
-  const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const handleSubmit = () => {
+  
     if (
       formData.Description === "" ||
       formData.Qty === 0 ||
