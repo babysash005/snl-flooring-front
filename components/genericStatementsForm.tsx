@@ -40,9 +40,9 @@ export default function GenericStatementTbl({ onClose }: PopupProps) {
     setPopup(!popup);
   };
 
-  const handleSubmit = (event: React.MouseEvent<HTMLInputElement>) => {
+  const handleSubmit = () => {
   
-    event.preventDefault();
+ 
     if (
       formData.ItemDescription === null ||
       formData.ItemDescription === "" ||
