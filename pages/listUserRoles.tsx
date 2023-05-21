@@ -27,7 +27,7 @@ interface Props {
 export async function getServerSideProps() {
     try {
 
-        const result = await axios.get("http://localhost:5222/api/ApplicationUserRole/appuser/getlist" , { withCredentials : true});
+        const result = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/ApplicationUserRole/appuser/getlist" , { withCredentials : true});
        debugger;
        console.log(result.data);
         if (result.status === 200) {
@@ -74,7 +74,7 @@ export default function ListUsers( { users } : Props)
             debugger;
               
       
-              const response = await axios.delete("http://localhost:5222/api/Users/auth/deleteuser?id=" + id  ,    { withCredentials: true });
+              const response = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Users/auth/deleteuser?id=" + id  ,    { withCredentials: true });
               console.log("Response:", response.data);
               debugger;
               if (response.status === 200) {
