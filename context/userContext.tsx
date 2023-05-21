@@ -38,7 +38,7 @@ const GlobalContext = createContext<ContextProps>(
     }
 )
 
-export const GlobalContextProvide = ({children}) =>{
+export const GlobalContextProvide = ({children} :any) =>{
     const [userid , setUserId] = useState('')
     const [data , setData] = useState<[] | DataType[]>([]);
     const [loggedIn , setLoggedIn] = useState(false)
