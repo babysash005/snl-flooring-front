@@ -4,11 +4,16 @@ import { useGlobalContext } from "@/context/userContext";
 import { useRouter } from "next/router";
 import axios from "axios";
 
+
+
+
 axios.defaults.withCredentials = true;
 
 export default function NavBar() {
+
   const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName } =
     useGlobalContext();
+    const [localStorage, setLocalStorage] = useState<Storage | null>(null);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
@@ -68,6 +73,13 @@ export default function NavBar() {
         setIsOpen(false);
         setIsOpen2(false);
         setLoggedIn(false);
+        if (typeof window !== undefined) {
+          debugger;
+        const storage = window.localStorage;
+        storage?.clear();
+        setLocalStorage(storage);
+  
+      }
         router.push("/login");
       }
       console.log("Response:", response.data);
@@ -179,7 +191,7 @@ export default function NavBar() {
                 <></>
               )}
 
-              {loggedIn === true && RoleName.includes("super") ? (
+              {loggedIn === true && RoleName.includes("super")  ? (
                 <div className="relative right-96 hidden sm:ml-9 sm:block">
                   <div className="flex space-x-5">
                     <div className="relative inline-block text-left">

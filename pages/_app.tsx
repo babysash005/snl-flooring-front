@@ -5,6 +5,8 @@ import Layout from './layout'
 import { useRouter } from 'next/router';
 import Home from './home';
 import { useState } from 'react';
+
+
 interface ImageProps {
   src: string;
   alt: string;

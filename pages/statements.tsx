@@ -1,3 +1,5 @@
+'use client';
+
 import GenericStatementTbl from "@/components/genericStatementsForm";
 import { data } from "autoprefixer";
 import React, { useState, useEffect } from "react";
@@ -5,6 +7,7 @@ import moment from "moment";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Popup from "@/components/popup";
+import { useGlobalContext } from "@/context/userContext";
 
 interface BuildTableProps {
   listItems: Items[];
@@ -78,7 +81,12 @@ interface Item {
   recordDate: string;
 }
 export default function Statements() {
- 
+  const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
+  useGlobalContext();
+  const headers = {
+    'Content-Type': 'application/json',
+    jwt: jwtpass,
+  };
   const router = useRouter();
   const { q }  = router.query;
   const [formData, setFormdata] = useState<StatementFormData>({
@@ -170,7 +178,7 @@ function CheckString(id : string)
     {
       let idvalue = parseInt(id);
       const result = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/Statement/api/statement/deleteRecordFromStatement?Id=" + idvalue ,
-      { withCredentials : true});
+      { withCredentials : true , headers});
       debugger;
       if(result.status === 200)
       {
@@ -346,7 +354,8 @@ function CheckString(id : string)
 
 
 
-          const result = await axios.post(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Statement/api/statement/savestatement" , formData , { withCredentials: true});  debugger;
+          const result = await axios.post(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Statement/api/statement/savestatement" , 
+          formData , { withCredentials: true , headers});  debugger;
           if(result.status === 200)
           {
             setPopUpMessage("Statement Save Sucessfully")
@@ -355,7 +364,8 @@ function CheckString(id : string)
           }
         }else{
           
-          const result = await axios.put(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Statement/api/statement/updatestatement" , formData , { withCredentials: true});  debugger;
+          const result = await axios.put(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Statement/api/statement/updatestatement" , formData ,
+           { withCredentials: true,headers});  debugger;
           if(result.status === 200)
           {
            // LoadData(q);
@@ -593,7 +603,7 @@ function BuildTable({ listItems, onDelete , Subtotal , BalanceOutStanding }: Bui
                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                           <button
                             type="button"
-                            onClick={(e) => onDelete(items.Id != null ? items.Id.toString() : items.GenericId)}
+                            onClick={(e) => onDelete(items.Id !== null &&  items.Id !== 0 ? items.Id.toString() : items.GenericId)}
                             className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                           >
                             Delete

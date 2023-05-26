@@ -1,5 +1,8 @@
+'use client';
+
 import React, { ChangeEvent, MouseEvent } from "react";
-import { useState } from "react";
+import { useState , useEffect } from "react";
+import axios from "axios";
 
 interface Items {
   Description: string;
@@ -8,6 +11,13 @@ interface Items {
   Total: number;
   GenericId: string;
   Id: number | null;
+  uomid : number ;
+  uom : string;
+}
+
+interface  uom {
+  id : number;
+  name  : string
 }
 
 type PopupProps = {
@@ -21,6 +31,8 @@ interface FormData {
   Total: number;
   GenericId: string;
   Id: number | null;
+  uomid : number  ;
+  uom : string;
 }
 
 export default function GenericFormTbl({ onClose }: PopupProps) {
@@ -31,7 +43,9 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
     UnitPrice: 0,
     Total: 0,
     GenericId : "",
-    Id : 0
+    Id : 0,
+    uomid : 0,
+    uom : ''
   });
   const [errorMessage, setErrorMessage] = useState(false);
 
@@ -43,7 +57,21 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
   const toggleModal = () => {
     setPopup(!popup);
   };
+  const [uoms, setUOMS] = useState<uom[]>([]);
 
+  useEffect(() => {
+    // Fetch the data from the API
+    axios
+      .get<uom[]>(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/UOMs/uoms/getalluoms" ,  { withCredentials: true })
+      .then((response) => {
+        // Extract the dropdown options from the API response
+        const options = response.data;
+        setUOMS(options);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   const handleSubmit = () => {
   
     if (
@@ -63,7 +91,9 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
         UnitPrice: 0,
         Total: 0,
         GenericId : "",
-        Id : 0
+        Id : 0,
+        uomid : 0,
+        uom : ""
 
       });
       toggleModal();
@@ -110,6 +140,33 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
                   className="mt-1 py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md"
                 />
               </div>
+
+
+              <div className="col-span-6 sm:col-span-3">
+                  <label  className="block text-sm font-medium text-gray-700">Select Role</label>
+                  <select id="uom" name="uom" autoComplete="uom" value={formData.uom}
+  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+    debugger;
+    const { name, value } = event.target;
+    let uomidvalue = uoms.find(x =>x.name == value)?.id;
+    setFormData((formData) => ({
+      ...formData,
+      uomid :uomidvalue || 0,
+      [name]: value,
+      
+    }));
+  }}  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    {/* <option>United States</option>
+                    <option>Canada</option>
+                    <option>Mexico</option> */}
+                    <option key="-1" value="-1">Select.....</option>
+              {uoms.map((option) => (
+          <option key={option.id} value={option.name}>
+            {option.name}
+          </option>
+        ))}
+                  </select>
+                </div>
 
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="name">

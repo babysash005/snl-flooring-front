@@ -1,3 +1,5 @@
+'use client';
+
 import GenericFormTbl from "@/components/genericFormTbl";
 import { data } from "autoprefixer";
 import React, { useState, useEffect } from "react";
@@ -5,13 +7,15 @@ import moment from "moment";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Popup from "@/components/popup";
+import { useGlobalContext } from "@/context/userContext";
 
 interface BuildTableProps {
   listItems: Items[];
   onDelete: (id: string) => void;
   Subtotal : number ,
   VAT : number ,
-  Total : number
+  Total : number,
+
 }
 
 type ItemsList = {
@@ -26,6 +30,8 @@ interface Items {
   Total: number;
   GenericId: string;
   Id: number | null;
+  uomid : number 
+  uom : string
 }
 
 interface FormData {
@@ -38,6 +44,29 @@ interface FormData {
   VAT: number;
   Items: Items[];
   Id: number | null;
+}
+interface Item {
+  description: string;
+  qty: number;
+  unitPrice: number;
+  total: number;
+  genericId: string;
+  id: number | null;
+  uomid : number | null;
+
+  uom : string;
+}
+
+interface Invoice {
+  att: string;
+  to: string;
+  jobSite: string;
+  date: string;
+  total: number;
+  subTotal: number;
+  vat: number;
+  items: Item[];
+  id: number | null;
 }
 
 interface InputJson {
@@ -59,7 +88,12 @@ interface InputJson {
 }
 
 export default function Quotations() {
- 
+  const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
+    useGlobalContext();
+    const headers = {
+      'Content-Type': 'application/json',
+      jwt: jwtpass,
+    };
   const router = useRouter();
   const { q }  = router.query;
   const [formData, setFormdata] = useState<FormData>({
@@ -152,7 +186,7 @@ function CheckString(id : string)
     {
       let idvalue = parseInt(id);
       const result = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/Quotations/api/quotation/deletequotationitem?Id=" + idvalue ,
-      { withCredentials : true});
+      { withCredentials : true,headers});
       debugger;
       if(result.status === 200)
       {
@@ -281,6 +315,17 @@ function CheckString(id : string)
   
 
    }
+   const [formsubmitsdata, setFormSubmitdata] = useState<Invoice>({
+    att: "",
+    to: "",
+    jobSite: "",
+    date: new Date().toString(),
+    total : 0,
+    subTotal : 0,
+    vat : 0,
+    items: [],
+    id : 0
+  });
    async function submit(event :  React.FormEvent )
    {
     debugger;
@@ -288,11 +333,38 @@ function CheckString(id : string)
     try {
 
       console.log(JSON.stringify(formData));
+
+      setFormSubmitdata((formdata1) => ({
+        
+        ...formdata1,
+        id : formData.Id,
+        att :  formData.ATT,
+        to :  formData.To,
+        jobSite : formData.JobSite,
+        date : moment(new Date(formData.Date)).format("YYYY-MM-DD") ,
+        // Items:  response.data.values.items,
+        items: formData.Items.map((v : Items) => ({
+          description: v.Description,
+          qty: v.Qty,
+          unitPrice: v.UnitPrice,
+          total: v.Total,
+          genericId: v.GenericId,
+          id : v.Id,
+          uomid : v.uomid,
+          uom : v.uom
+        })),
+        vat : formData.VAT,
+       subTotal : formData.SubTotal,
+       total : formData.Total,
+      }))
+
+
+      
       if(VaildationCheck() === 2)
       {
         if(formData.Id === null || formData.Id === 0)
         {
-          const result = await axios.post(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/savequotation" , formData , { withCredentials: true});  debugger;
+          const result = await axios.post(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/savequotation" , formsubmitsdata , { withCredentials: true , headers});  debugger;
           if(result.status === 200)
           {
             setPopUpMessage("Quotation Save Sucessfully")
@@ -301,7 +373,7 @@ function CheckString(id : string)
           }
         }else{
           
-          const result = await axios.put(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/updatequotation" , formData , { withCredentials: true});  debugger;
+          const result = await axios.put(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/updatequotation" , formsubmitsdata , { withCredentials: true , headers});  debugger;
           if(result.status === 200)
           {
             LoadData(q);
@@ -503,6 +575,9 @@ function BuildTable({ listItems, onDelete , Subtotal , VAT , Total }: BuildTable
                     Description
                   </th>
                   <th scope="col" className="px-6 py-3">
+                    UoM
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     Qty
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -538,6 +613,12 @@ function BuildTable({ listItems, onDelete , Subtotal , VAT , Total }: BuildTable
                         >
                           {items.Description}
                         </td>
+                        <td
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                        >
+                          {items.uom}
+                        </td>
 
                         <td
                           scope="row"
@@ -562,7 +643,7 @@ function BuildTable({ listItems, onDelete , Subtotal , VAT , Total }: BuildTable
                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                           <button
                             type="button"
-                            onClick={(e) => onDelete(items.Id != null ? items.Id.toString() : items.GenericId)}
+                            onClick={(e) => onDelete(items.Id !== null && items.Id !== 0 ? items.Id.toString() : items.GenericId)}
                             className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                           >
                             Delete

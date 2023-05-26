@@ -9,17 +9,20 @@ import { GlobalContextProvide } from "@/context/userContext";
 
 
 
+
 interface Props {
-    children?: ReactNode
+    children?: ReactNode,
+   
     // any props that come into the component
 }
 
 
- const Layout   = ({ children  } : Props ) =>
+ const Layout   = ({ children   } : Props ) =>
  {
     return (
 <>
 <GlobalContextProvide>
+
 <NavBar />
         <div >
             <main >
@@ -27,6 +30,7 @@ interface Props {
             {children}
             </main>
         </div>
+       
 </GlobalContextProvide>
     
         </>
