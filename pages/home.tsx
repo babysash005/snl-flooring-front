@@ -5,6 +5,8 @@ import Swipe from "react-easy-swipe";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { useRouter } from 'next/router';
 import Typewriter from 'typewriter-effect';
+import Footer from '@/components/Footer';
+import { useGlobalContext } from '@/context/userContext';
 
 interface ImageProps {
   src: string;
@@ -19,7 +21,9 @@ interface CarouselProps {
 
 
 export default function Home() {
-
+  const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
+    useGlobalContext();
+    debugger;
   const router  = useRouter();
   function PushToLogin()
   {
@@ -45,12 +49,7 @@ export default function Home() {
       .pauseFor(250)
       .deleteAll()
       .callFunction(() => {
-        typewriter
-          .typeString('Choose us we provide the best for more')
-          .callFunction(() => {
-            console.log('New message typed');
-          })
-          .start();
+      
       })
       .start();
   }}
@@ -63,9 +62,11 @@ export default function Home() {
         </span>
     </h1>
     <p className="mx-auto mt-12 max-w-xl text-lg text-slate-700 leading-7">Want to style up your home / place of work? Maybe get that
-        perfect feel ? </p>
-    <a className="bg-blue-500 rounded-xl text-white font-medium px-4 py-3 sm:mt-10 mt-8 hover:bg-blue-600" onClick={PushToLogin}>Login→
-    </a>
+        perfect feel? </p>
+
+        {loggedIn === false ? (<>  <a className="bg-blue-500 rounded-xl text-white font-medium px-4 py-3 sm:mt-10 mt-8 hover:bg-blue-600" onClick={PushToLogin}>Login→
+    </a></>): (<></>)}
+  
 </main>
     
 
@@ -198,125 +199,3 @@ About
 
 
 
-export  function Caourlole() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [images , setImages] = useState<CarouselProps>( {images : [{
-    src: '/images/pexels-freemockupsorg-775219.jpg',
-    alt: 'Image 1',
-    width: 800,
-    height: 600,
-  },
-  {
-    src: '/images/pexels-pixabay-534172.jpg',
-    alt: 'Image 2',
-    width: 1200,
-    height: 800,
-  },
-  {
-    src: '/images/pexels-jill-wellington-39853.jpg',
-    alt: 'Image 3',
-    width: 1200,
-    height: 800,
-  },]})
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNextSlide();
-    }, 3000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  const handleNextSlide = () => {
-    let newSlide = currentSlide === images.images.length - 1 ? 0 : currentSlide + 1;
-    setCurrentSlide(newSlide);
-  };
-
-  const handlePrevSlide = () => {
-    let newSlide = currentSlide === 0 ? images.images.length - 1 : currentSlide - 1;
-    setCurrentSlide(newSlide);
-  };
-  return (
-    <div id="default-carousel" className="relative w-full" data-carousel="slide">
-    {/* Carousel wrapper */}
-    <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-      {images.images.map((image, index) => (
-        <div
-          key={index}
-          className={`${
-            index === currentSlide ? 'block' : 'hidden'
-          } duration-700 ease-in-out`}
-          data-carousel-item
-        >
-          <Image
-            src={image.src}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
-            className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-          />
-        </div>
-      ))}
-    </div>
-    {/* Slider indicators */}
-    <div className="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
-      {images.images.map((_, index) => (
-        <button
-          key={index}
-          type="button"
-          className={`w-3 h-3 rounded-full ${
-            index === currentSlide ? 'bg-white' : 'bg-gray-300'
-          }`}
-          aria-current={index === currentSlide}
-          aria-label={`Slide ${index + 1}`}
-          data-carousel-slide-to={index}
-          onClick={() => setCurrentSlide(index)}
-        ></button>
-      ))}
-    </div>
-    {/* Slider controls */}
-    <button
-      type="button"
-      className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      data-carousel-prev
-      onClick={handlePrevSlide}
-    >
-      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-        <svg
-          aria-hidden="true"
-          className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-          </svg>
-        <span className="sr-only">Previous</span>
-      </span>
-    </button>
-    <button
-      type="button"
-      className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      data-carousel-next
-      onClick={handleNextSlide}
-    >
-      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-        <svg
-          aria-hidden="true"
-          className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-        </svg>
-        <span className="sr-only">Next</span>
-      </span>
-    </button>
-  </div>
-  )
-}

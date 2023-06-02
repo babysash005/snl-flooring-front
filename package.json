@@ -16,6 +16,7 @@
     "axios": "^1.4.0",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
+    "fontawesome": "^5.6.3",
     "install": "^0.13.0",
     "moment": "^2.29.4",
     "next": "13.3.1",

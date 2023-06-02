@@ -9,6 +9,11 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
+
+
+
+
+
 export default function NavBar() {
 
   const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName } =
@@ -90,8 +95,8 @@ export default function NavBar() {
 
   return (
     <div>
-      <div className="header-2">
-        <nav className="bg-white py-2 md:py-4">
+      <div className="">
+        <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg">
           <div className="container px-4 mx-auto md:flex md:items-center">
             <div className="flex justify-between items-center">
               <div className="flex justify-center items-center flex-shrink-0">
@@ -102,12 +107,12 @@ export default function NavBar() {
                   SNL <span className="text-blue-500">Flooring</span>
                 </h1>
               </div>
-              <button
+              {/* <button
                 onClick={PushToHome}
                 className="relative left-[28rem] bg-blue-500 text-white rounded-md px-3 py-2 text-sm font-medium hover:bg-white hover:text-blue-500 hover:border border-blue-500"
               >
                 Home
-              </button>
+              </button> */}
             </div>
             <div
               className="hidden md:flex flex-col md:flex-row md:ml-auto mt-3 md:mt-0"
@@ -281,5 +286,6 @@ export default function NavBar() {
         </nav>
       </div>
     </div>
+    
   );
 }

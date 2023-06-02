@@ -141,7 +141,9 @@ async function LoadData(qvalue :any) {
           UnitPrice: v.unitPrice,
           Total: v.total,
           GenericId: v.genericId,
-          Id : v.id
+          Id : v.id,
+          uomid : v.uomid ,
+          uom : v.uom
         })),
         VAT : response.data.values.vat,
        SubTotal : response.data.values.subTotal,
@@ -334,29 +336,29 @@ function CheckString(id : string)
 
       console.log(JSON.stringify(formData));
 
-      setFormSubmitdata((formdata1) => ({
+      // setFormSubmitdata((formdata1) => ({
         
-        ...formdata1,
-        id : formData.Id,
-        att :  formData.ATT,
-        to :  formData.To,
-        jobSite : formData.JobSite,
-        date : moment(new Date(formData.Date)).format("YYYY-MM-DD") ,
-        // Items:  response.data.values.items,
-        items: formData.Items.map((v : Items) => ({
-          description: v.Description,
-          qty: v.Qty,
-          unitPrice: v.UnitPrice,
-          total: v.Total,
-          genericId: v.GenericId,
-          id : v.Id,
-          uomid : v.uomid,
-          uom : v.uom
-        })),
-        vat : formData.VAT,
-       subTotal : formData.SubTotal,
-       total : formData.Total,
-      }))
+      //   ...formdata1,
+      //   id : formData.Id,
+      //   att :  formData.ATT,
+      //   to :  formData.To,
+      //   jobSite : formData.JobSite,
+      //   date : moment(new Date(formData.Date)).format("YYYY-MM-DD") ,
+      //   // Items:  response.data.values.items,
+      //   items: formData.Items.map((v : Items) => ({
+      //     description: v.Description,
+      //     qty: v.Qty,
+      //     unitPrice: v.UnitPrice,
+      //     total: v.Total,
+      //     genericId: v.GenericId,
+      //     id : v.Id,
+      //     uomid : v.uomid,
+      //     uom : v.uom
+      //   })),
+      //   vat : formData.VAT,
+      //  subTotal : formData.SubTotal,
+      //  total : formData.Total,
+      // }))
 
 
       
@@ -364,7 +366,7 @@ function CheckString(id : string)
       {
         if(formData.Id === null || formData.Id === 0)
         {
-          const result = await axios.post(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/savequotation" , formsubmitsdata , { withCredentials: true , headers});  debugger;
+          const result = await axios.post(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/savequotation" , formData , { withCredentials: true , headers});  debugger;
           if(result.status === 200)
           {
             setPopUpMessage("Quotation Save Sucessfully")
@@ -373,7 +375,7 @@ function CheckString(id : string)
           }
         }else{
           
-          const result = await axios.put(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/updatequotation" , formsubmitsdata , { withCredentials: true , headers});  debugger;
+          const result = await axios.put(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/updatequotation" , formData , { withCredentials: true , headers});  debugger;
           if(result.status === 200)
           {
             LoadData(q);

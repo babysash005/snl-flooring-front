@@ -2,7 +2,7 @@ import React from "react";
 import { useState , useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-
+import { useGlobalContext } from "@/context/userContext";
 
 
 axios.defaults.withCredentials = true;
@@ -58,7 +58,8 @@ export default function ListUsers( { users } : Props)
 {
     const [listusers, setUsersList] = useState(users);
     const router  = useRouter();
-
+    const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
+    useGlobalContext();
 
 
     async function PushtoRegister() {
@@ -93,11 +94,12 @@ export default function ListUsers( { users } : Props)
 
     return (
         <>
-              <button type="button" onClick={PushtoRegister} className="relative top-24 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button type="button" onClick={PushtoRegister} 
+              className="relative top-24 left-64 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
               Register
             </button>
-           
-          <div className="relative   sm:rounded-lg w-full top-[125px]">
+           <br /> <br />  <br /> 
+            <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24 rounded-t">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-white-700 uppercase bg-gray-50 dark:bg-blue-400 dark:text-white">
                 <tr>
@@ -164,27 +166,29 @@ export default function ListUsers( { users } : Props)
                           {listitems.roleName}
                         </td>
                         {
-                            listitems.roleName.includes("super") ? 
+                            RoleName.includes("super") ? 
                             (
-                                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                                <button
-                                 disabled  type="submit"  onClick={e => DeleteUser(e , listitems.id)}
-                                  className="bg-gray-400 cursor-not-allowed text-white  hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-gray-400 dark:hover:bg-gray-400 dark:focus:ring-red-800"
-                                >
-                                  Delete
-                                </button>
-                              </td>
+
+                              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                              <button
+                               type="submit"  onClick={e => DeleteUser(e , listitems.id)}
+                                className="bg-red-700 cursor-auto text-white  hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                            
                             ):
                             (
                                 (
-                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                                    <button
-                                     type="submit"  onClick={e => DeleteUser(e , listitems.id)}
-                                      className="bg-red-700 cursor-auto text-white  hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                                    >
-                                      Delete
-                                    </button>
-                                  </td>
+                                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                                  <button
+                                   disabled  type="submit"  onClick={e => DeleteUser(e , listitems.id)}
+                                    className="bg-gray-400 cursor-not-allowed text-white  hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-gray-400 dark:hover:bg-gray-400 dark:focus:ring-red-800"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
                                 )
                             )
                         }

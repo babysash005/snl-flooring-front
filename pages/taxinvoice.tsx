@@ -29,6 +29,8 @@ interface Items {
   Total: number;
   GenericId: string;
   Id: number | null;
+  uom : string;
+  uomid : number | null
 }
 
 interface FormData {
@@ -116,7 +118,9 @@ async function LoadData(qvalue :any) {
           UnitPrice: v.unitPrice,
           Total: v.total,
           GenericId: v.genericId,
-          Id : v.id
+          Id : v.id,
+          uom : v.uom,
+          uomid : v.uomid
         })),
         VAT : response.data.values.vat,
        SubTotal : response.data.values.subTotal,
@@ -504,6 +508,9 @@ function BuildTable({ listItems, onDelete , Subtotal , VAT , Total }: BuildTable
                     Description
                   </th>
                   <th scope="col" className="px-6 py-3">
+                    UoM
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     Qty
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -539,7 +546,12 @@ function BuildTable({ listItems, onDelete , Subtotal , VAT , Total }: BuildTable
                         >
                           {items.Description}
                         </td>
-
+                        <td
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                        >
+                          {items.uom}
+                        </td>
                         <td
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"

@@ -74,10 +74,11 @@ export default function TaxInvoiceIndex( { values} : ResponseData ) {
   const DeleteTaxInvoice  =async (event: React.FormEvent , id : string) => {
     try {
       event.preventDefault();
-
+      debugger;
       const result  = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/TaxInvoice/api/taxinvoices/deletetaxinvoice?Id=" +  id , { withCredentials : true}).then((response) =>{
         if(response.status === 200)
         {
+          debugger;
           setPopUpMessage("Tax Invoice Delete Sucessfully")
           setRouteMessage("taxinvoiceslist");
     
@@ -88,6 +89,35 @@ export default function TaxInvoiceIndex( { values} : ResponseData ) {
       })
     } catch (error) {
       
+    }
+    
+  }
+
+  const GeneratePDF  =async (event: React.FormEvent , id : string , referenceNumber : string) => {
+    debugger;
+    event.preventDefault();
+    try {
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+'api/TaxInvoice/api/taxinvoice/Generatepdf?q=' +  id, {
+        responseType: 'arraybuffer',
+      });
+        debugger;
+      // Create a Blob from the response data
+      debugger;
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+  
+      // Generate a temporary URL for the Blob
+      const url = URL.createObjectURL(blob);
+  
+      // Trigger a file download using the temporary URL
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = referenceNumber +'.pdf';
+      link.click();
+  
+      // Clean up the temporary URL
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
     }
     
   }
@@ -102,6 +132,8 @@ export default function TaxInvoiceIndex( { values} : ResponseData ) {
             <button type="button" onClick={PushToHome} className="fixed  top-24 left-[400px] bg-yellow-500 text-white rounded-md px-3 py-2 text-sm font-medium hover:bg-white hover:text-yellow-500 hover:border border-yellow-500">
              Close
             </button>
+
+            <br />  <br />  <br />
      <section className="py-1 bg-blueGray-50">
     <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24">
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
@@ -168,6 +200,13 @@ export default function TaxInvoiceIndex( { values} : ResponseData ) {
                         className="text-white bg-blue-500 hover:bg-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-800"
                       >
                         Details
+                      </button>
+                      <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+                          <button
+                        type="submit"  onClick={e => GeneratePDF(e , items.id , items.referenceNumber)}
+                        className="text-white bg-blue-500 hover:bg-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                      >
+                        Generate PDF
                       </button>
                       <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
                       <button
