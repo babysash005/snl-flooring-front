@@ -104,7 +104,7 @@ export default function QuotationsIndex( { values} : ResponseData ) {
     event.preventDefault();
     setLoadindState(true)
     try {
-
+//new test
     //   const url = process.env.NEXT_PUBLIC_API_ENDPOINT +"Home/BuildPdfQuotations?q=" + id;
     //   const link = document.createElement('a');
     // link.href = url;
