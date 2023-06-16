@@ -114,7 +114,7 @@ export default function QuotationsIndex( { values} : ResponseData ) {
   
       // Generate a temporary URL for the Blob
       const url = URL.createObjectURL(blob);
-  
+      debugger;
       // Trigger a file download using the temporary URL
       const link = document.createElement('a');
       link.href = url;
