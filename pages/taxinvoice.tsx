@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Popup from "@/components/popup";
 import { useGlobalContext } from "@/context/userContext";
+import GenericLoading from "@/components/genericLoading";
 
 interface BuildTableProps {
   listItems: Items[];
@@ -64,14 +65,31 @@ interface InputJson {
 }
 
 export default function TaxInvoices() {
-  const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
-  useGlobalContext();
-  const headers = {
-    'Content-Type': 'application/json',
-    jwt: jwtpass,
-  };
+  // const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
+  // useGlobalContext();
+  // const headers = {
+  //   'Content-Type': 'application/json',
+  //   jwt: jwtpass,
+  // };
+  let jwtpass : string | null  = "";
+  try {
+    if (typeof window !== undefined) {
+      debugger;
+    const storage = window.localStorage;
+    jwtpass = storage?.getItem('jwt');
+  
+  }
+  } catch (error) {
+    
+  }
+
+    const headers = {
+      'Content-Type': 'application/json',
+      jwt: jwtpass,
+    };
   const router = useRouter();
   const { q }  = router.query;
+  const [loadingStateActive , setLoadindState] = useState(false);
   const [formData, setFormdata] = useState<FormData>({
     VatNo: "",
     To: "",
@@ -96,6 +114,7 @@ export default function TaxInvoices() {
   }, []);
 async function LoadData(qvalue :any) {
   debugger;
+  setLoadindState(true);
   try {
     const result = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/TaxInvoice/api/taxinvoices/gettaxinvoicesDetails?Id=" + q , 
     { withCredentials : true}).then(( response) =>{
@@ -133,6 +152,7 @@ async function LoadData(qvalue :any) {
   } catch (error) {
     console.log(error);
   }
+  setLoadindState(false);
 }
 
 function CheckString(id : string)
@@ -159,10 +179,13 @@ function CheckString(id : string)
     
 
     let ItemTotalSub : any = 0; ;
+    setLoadindState(true);
     if(CheckString(id) === true)
     {
       if(formData.Items.length > 1)
     {
+
+     
       let idvalue = parseInt(id);
       const result = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/TaxInvoice/api/taxinvoices/deletetaxinvoiceitem?Id=" + idvalue ,
       { withCredentials : true , headers});
@@ -194,7 +217,7 @@ function CheckString(id : string)
       ItemTotalSub  = formData.Items.find((item) => item.GenericId === id)?.Total;
       UpdateSubtotalDelete(ItemTotalSub);
     }
-
+    setLoadindState(false);
   }
 
 
@@ -298,8 +321,14 @@ function CheckString(id : string)
    {
     debugger;
     event.preventDefault();
+    setLoadindState(true);
     try {
 
+      if(jwtpass === null && jwtpass === "")
+      {
+        const storage = window.localStorage;
+        jwtpass = storage?.getItem('jwt');
+      }
       console.log(JSON.stringify(formData));
       if(VaildationCheck() === 2)
       {
@@ -335,6 +364,7 @@ function CheckString(id : string)
       console.log(error);
       // setPopUpMessage("Oops !!!! Statement failed to save, try again later")
     }
+    setLoadindState(false);
    }
    function VaildationCheck()
    {
@@ -358,6 +388,7 @@ function CheckString(id : string)
   return (
     
     <div className="mt-16">
+          <GenericLoading loadingSTST={loadingStateActive} />
       <Popup message={message} />
       <div className="relative top-2 right-[45rem] w-[60rem]">
         <div className="relative left-full">

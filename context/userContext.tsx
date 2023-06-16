@@ -22,7 +22,7 @@ interface ContextProps {
     setData : Dispatch<SetStateAction<DataType[]>>,
     loggedIn : boolean
     setLoggedIn :Dispatch<SetStateAction<boolean>>,
-    RoleName : string,
+    RoleName : string 
     setRoleName : Dispatch<SetStateAction<string>>
     jwtpass : string | null,
     setJWTPass : Dispatch<SetStateAction<string>>
@@ -38,7 +38,7 @@ const GlobalContext = createContext<ContextProps>(
         loggedIn : false,
         setLoggedIn: (): boolean => false,
         RoleName : '',
-        setRoleName : () : string => '',
+        setRoleName : () : string=> '',
         jwtpass : '',
         setJWTPass : () : string => ''
     }
@@ -62,22 +62,34 @@ export const GlobalContextProvide = ({children} : Props) =>{
 
     useEffect(() => {
 
-        if (typeof window !== undefined) {
+        // if (typeof window !== undefined) {
+        //     debugger;
+        //   const storage = window.localStorage;
+        //   items = storage?.getItem('jwt');
+        //   setLocalStorage(storage);
+        //   setJWTPass(items || '');
+        // }
+
+   
+        let jwtpass : string | null  = "";
+        try {
+          if (typeof window !== undefined) {
             debugger;
           const storage = window.localStorage;
-          items = storage?.getItem('jwt');
-          setLocalStorage(storage);
-          setJWTPass(items || '');
+          jwtpass = storage?.getItem('jwt');
+          setLoggedIn(jwtpass !== null && jwtpass !== "" ? true : false);4
+       
         }
-
-
-
+        } catch (error) {
+          
+        }
+      
         const fetchData = async () => {
-       debugger;
+     
        console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
        const headers = {
         'Content-Type': 'application/json',
-        jwt: items,
+        jwt: jwtpass,
       };
       
             const response = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT + "api/Users/auth/verify" , {headers});

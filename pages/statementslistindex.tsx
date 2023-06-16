@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import PopupReload from '@/components/popupReload';
+import GenericLoading from '@/components/genericLoading';
 
 interface Value {
   id: string;
@@ -91,10 +92,11 @@ export default function QuotationsIndex({ values }: QuotationsIndexProps) {
       console.error(error);
     }
   };
-
+  const [loadingStateActive , setLoadindState] = useState(false);
   const GeneratePDF  =async (event: React.FormEvent , id : string , referenceNumber : string) => {
     debugger;
     event.preventDefault();
+    setLoadindState(true)
     try {
       const response = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+'api/Statement/api/statement/Generatepdf?q=' +  id, {
         responseType: 'arraybuffer',
@@ -118,11 +120,12 @@ export default function QuotationsIndex({ values }: QuotationsIndexProps) {
     } catch (error) {
       console.error(error);
     }
-    
+    setLoadindState(false)
   }
 
   return (
     <div className="w-px-[00px]">
+    <GenericLoading loadingSTST={loadingStateActive} />
       <PopupReload message={message} route={routemessage} />
       <button
         type="button"
@@ -179,7 +182,7 @@ export default function QuotationsIndex({ values }: QuotationsIndexProps) {
                   {values && values.length === 0 ? (
                     <tr>
                       <td colSpan={2} className="text-center py-4">
-                        Loading...
+                      No Data....
                       </td>
                     </tr>
                   ) : (

@@ -6,6 +6,7 @@ import Home from './home';
 import { useState , useEffect } from 'react';
 import axios from 'axios';
 
+
 interface ImageProps {
   src: string;
   alt: string;

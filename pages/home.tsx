@@ -34,9 +34,9 @@ export default function Home() {
     <div>
    
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 sm:mt-28 mt-20">
-    <a href="#" target="_blank" rel="noreferrer"
+    <p  rel="noreferrer"
         className="border rounded-2xl py-1 px-4 text-slate-500 text-sm mb-5 hover:scale-105 transition duration-300 ease-in-out">Flooring For The Best
-        <span className="font-semibold"></span> </a>
+        <span className="font-semibold"></span> </p>
         
     <h1 className="mx-auto max-w-4xl font-display text-5xl font-bold tracking-normal text-slate-900 sm:text-7xl">
     <Typewriter
@@ -82,7 +82,7 @@ Store
 
 <div className="flex items-center" id="store-nav-content">
 
-    <a className="pl-3 inline-block no-underline hover:text-black" href="#">
+    {/* <a className="pl-3 inline-block no-underline hover:text-black" href="#">
         <svg className="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
         </svg>
@@ -92,7 +92,7 @@ Store
         <svg className="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
         </svg>
-    </a>
+    </a> */}
 
 </div>
 </div>
@@ -171,7 +171,7 @@ About
     <div className="w-full mx-auto flex flex-wrap">
         <div className="flex w-full lg:w-1/2 ">
             <div className="px-3 md:px-0">
-                <h3 className="font-bold text-gray-900">About</h3>
+                <h3 className="font-bold text-gray-900">Additional</h3>
                 <p className="py-4">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel mi ut felis tempus commodo nec id erat. Suspendisse consectetur dapibus velit ut lacinia.
                 </p>
@@ -182,7 +182,7 @@ About
                 <h3 className="font-bold text-gray-900">Social</h3>
                 <ul className="list-reset items-center pt-3">
                     <li>
-                        <a className="inline-block no-underline hover:text-black hover:underline py-1" href="#">Add social links</a>
+                        <a className="inline-block no-underline hover:text-black hover:underline py-1" href="#">Will be filled with SNLs Links</a>
                     </li>
                 </ul>
             </div>

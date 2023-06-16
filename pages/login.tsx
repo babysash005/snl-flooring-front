@@ -19,6 +19,7 @@ interface FormData{
 
 export default function Login() {
 
+
   const router  = useRouter();
   // const [formData  , setFormdata ] = useState<FormData>({UserName : "" , Password : ""});
   const {userid , setUserId , loggedIn , setLoggedIn , RoleName  , setRoleName} = useGlobalContext(); 
@@ -48,7 +49,19 @@ const { errors  } = formState;
             setLoggedIn(true)
             setRoleName(response.data.role);
     
+            const headers = {
+              'Content-Type': 'application/json',
+              jwt: response.data.jwt,
+            };
+            const response2 = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT + "api/Users/auth/verify" , {headers});
+      
+            // setLoggedIn(response2.data.loggedIn);
+            // setUserId(response2.data.loggedIn)
+            // setRoleName(response2.data.rolename)
+            // setLocalStorage(response2.data.jwt);
             localStorage?.setItem('jwt' , response.data.jwt);
+            localStorage?.setItem('loggedIn' , response2.data.loggedIn);
+            localStorage?.setItem('rolename' , response2.data.rolename);
             router.push('/');
         }
         console.log("Response:", response.data);

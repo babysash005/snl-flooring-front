@@ -142,8 +142,8 @@ export default function GenericFormTbl({ onClose }: PopupProps) {
               </div>
 
 
-              <div className="col-span-6 sm:col-span-3">
-                  <label  className="block text-sm font-medium text-gray-700">Select Role</label>
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <label  className="block text-sm font-medium text-gray-700">Select Unit of measure</label>
                   <select id="uom" name="uom" autoComplete="uom" value={formData.uom}
   onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
     debugger;

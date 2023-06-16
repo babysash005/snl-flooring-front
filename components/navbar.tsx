@@ -16,9 +16,15 @@ axios.defaults.withCredentials = true;
 
 export default function NavBar() {
 
+  debugger;
   const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName } =
     useGlobalContext();
     const [localStorage, setLocalStorage] = useState<Storage | null>(null);
+    if(localStorage?.getItem("jwt") !== null &&  localStorage?.getItem("jwt") !== "")
+    {
+      setLoggedIn(true)
+    }
+
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
@@ -196,7 +202,7 @@ export default function NavBar() {
                 <></>
               )}
 
-              {loggedIn === true && RoleName.includes("super")  ? (
+              {loggedIn === true && RoleName?.includes("super")  ? (
                 <div className="relative right-96 hidden sm:ml-9 sm:block">
                   <div className="flex space-x-5">
                     <div className="relative inline-block text-left">

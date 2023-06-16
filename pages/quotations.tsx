@@ -7,6 +7,7 @@ import moment from "moment";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Popup from "@/components/popup";
+import GenericLoading from '@/components/genericLoading';
 import { useGlobalContext } from "@/context/userContext";
 
 interface BuildTableProps {
@@ -88,14 +89,26 @@ interface InputJson {
 }
 
 export default function Quotations() {
-  const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
-    useGlobalContext();
+  // const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
+  //   useGlobalContext();
+  let jwtpass : string | null  = "";
+  try {
+    if (typeof window !== undefined) {
+      debugger;
+    const storage = window.localStorage;
+    jwtpass = storage?.getItem('jwt');
+  
+  }
+  } catch (error) {
+    
+  }
     const headers = {
       'Content-Type': 'application/json',
       jwt: jwtpass,
     };
   const router = useRouter();
   const { q }  = router.query;
+  const [loadingStateActive , setLoadindState] = useState(false);
   const [formData, setFormdata] = useState<FormData>({
     ATT: "",
     To: "",
@@ -120,6 +133,7 @@ export default function Quotations() {
   }, []);
 async function LoadData(qvalue :any) {
   debugger;
+  setLoadindState(true)
   try {
     const result = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/Quotations/api/quotation/getquotationdetails?Id=" + q , { withCredentials : true}).then(( response) =>{
       debugger;
@@ -156,6 +170,7 @@ async function LoadData(qvalue :any) {
   } catch (error) {
     console.log(error);
   }
+  setLoadindState(false)
 }
 
 function CheckString(id : string)
@@ -186,6 +201,7 @@ function CheckString(id : string)
     {
       if(formData.Items.length > 1)
     {
+      setLoadindState(true)
       let idvalue = parseInt(id);
       const result = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/Quotations/api/quotation/deletequotationitem?Id=" + idvalue ,
       { withCredentials : true,headers});
@@ -206,7 +222,7 @@ function CheckString(id : string)
     }else{
       setPopUpMessage( "Oops!!! , Please ensure you have more than one item in quotation before deleteing and item");  
     }
-      
+    setLoadindState(false)
     }else{
      
       setFormdata((formdata) => ({
@@ -332,6 +348,7 @@ function CheckString(id : string)
    {
     debugger;
     event.preventDefault();
+    setLoadindState(true);
     try {
 
       console.log(JSON.stringify(formData));
@@ -394,6 +411,7 @@ function CheckString(id : string)
       console.log(error);
       // setPopUpMessage("Oops !!!! Quotation failed to save, try again later")
     }
+    setLoadindState(false);
    }
    function VaildationCheck()
    {
@@ -435,6 +453,7 @@ function CheckString(id : string)
   return (
     
     <div className="mt-16">
+    <GenericLoading loadingSTST={loadingStateActive} />
       <Popup message={message} />
       <div className="relative top-2 right-[45rem] w-[60rem]">
         <div className="relative left-full">

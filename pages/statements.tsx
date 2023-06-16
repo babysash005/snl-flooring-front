@@ -7,6 +7,7 @@ import moment from "moment";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Popup from "@/components/popup";
+import GenericLoading from "@/components/genericLoading";
 import { useGlobalContext } from "@/context/userContext";
 
 interface BuildTableProps {
@@ -81,14 +82,30 @@ interface Item {
   recordDate: string;
 }
 export default function Statements() {
-  const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
-  useGlobalContext();
-  const headers = {
-    'Content-Type': 'application/json',
-    jwt: jwtpass,
-  };
+  // const { userid, setUserId, loggedIn, setLoggedIn, RoleName, setRoleName , jwtpass , setJWTPass } =
+  // useGlobalContext();
+  // const headers = {
+  //   'Content-Type': 'application/json',
+  //   jwt: jwtpass,
+  // };
+  let jwtpass : string | null  = "";
+  try {
+    if (typeof window !== undefined) {
+      debugger;
+    const storage = window.localStorage;
+    jwtpass = storage?.getItem('jwt');
+  
+  }
+  } catch (error) {
+    
+  }
+    const headers = {
+      'Content-Type': 'application/json',
+      jwt: jwtpass,
+    };
   const router = useRouter();
   const { q }  = router.query;
+  const [loadingStateActive , setLoadindState] = useState(false);
   const [formData, setFormdata] = useState<StatementFormData>({
     BalanceOutStanding: 0, // Ensure it's a number, not a string
     ATT: "",
@@ -104,7 +121,7 @@ export default function Statements() {
 
   useEffect(() => {
     // Fetch the data from the API
-    if(q !== null && q  !== "")
+    if(q !== null && q  !== "" && q !== undefined)
     {
       LoadData(q);
     }
@@ -113,39 +130,35 @@ export default function Statements() {
   }, []);
 async function LoadData(qvalue :any) {
   debugger;
+    setLoadindState(true);
   try {
-    const result = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/Statement/api/statement/getstatment?Id=" + q , { withCredentials : true}).then(( response) =>{
-      debugger;
-      console.log(response);
-  
-
-      setFormdata((formdata) => ({
+    const result = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/Statement/api/statement/getstatment?Id=" + q , { withCredentials : true});
+    const response = result;
+    setFormdata((formdata) => ({
         
-        ...formdata,
-        Id : response.data.values.id,
-        ATT :  response.data.values.att,
-        To :  response.data.values.to,
-        Contact : response.data.values.contact,
-        Date : moment(new Date(response.data.values.date)).format("YYYY-MM-DD") ,
-        // Items:  response.data.values.items,
-        Items: response.data.values.items.map((v : any) => ({
-          ItemDescription: v.itemDescription,
-          RecordDate: moment(new Date(v.recordDate.toString())).format("YYYY-MM-DD") ,
-          InvNo: v.invNo,
-          Amount: v.amount,
-          GenericId: v.genericId,
-          Id : v.id
-        })),
-   
-       BalanceOutStanding : response.data.values.balanceOutStanding,
-      }))
-    }).catch(error => {
-      console.log(error);
-    });
+      ...formdata,
+      Id : response.data.values.id,
+      ATT :  response.data.values.att,
+      To :  response.data.values.to,
+      Contact : response.data.values.contact,
+      Date : moment(new Date(response.data.values.date)).format("YYYY-MM-DD") ,
+      // Items:  response.data.values.items,
+      Items: response.data.values.items.map((v : any) => ({
+        ItemDescription: v.itemDescription,
+        RecordDate: moment(new Date(v.recordDate.toString())).format("YYYY-MM-DD") ,
+        InvNo: v.invNo,
+        Amount: v.amount,
+        GenericId: v.genericId,
+        Id : v.id
+      })),
+ 
+     BalanceOutStanding : response.data.values.balanceOutStanding,
+    }))
     
   } catch (error) {
     console.log(error);
   }
+  setLoadindState(false);
 }
 
 function CheckString(id : string)
@@ -176,6 +189,7 @@ function CheckString(id : string)
     {
       if(formData.Items.length > 1)
     {
+      setLoadindState(true);
       let idvalue = parseInt(id);
       const result = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+"api/Statement/api/statement/deleteRecordFromStatement?Id=" + idvalue ,
       { withCredentials : true , headers});
@@ -196,7 +210,7 @@ function CheckString(id : string)
     }else{
       setPopUpMessage( "Oops!!! , Please ensure you have more than one item in Statement before deleteing and item");  
     }
-      
+    setLoadindState(false);
     }else{
      
       setFormdata((formdata) => ({
@@ -322,6 +336,7 @@ function CheckString(id : string)
    {
     debugger;
     event.preventDefault();
+    setLoadindState(true);
     try {
 
       console.log(JSON.stringify(formData));
@@ -384,6 +399,7 @@ function CheckString(id : string)
       console.log(error);
       // setPopUpMessage("Oops !!!! Statement failed to save, try again later")
     }
+    setLoadindState(false);
    }
    function VaildationCheck()
    {
@@ -407,6 +423,7 @@ function CheckString(id : string)
   return (
     
     <div className="mt-16">
+        <GenericLoading loadingSTST={loadingStateActive} />
       <Popup message={message} />
       <div className="relative top-2 right-[45rem] w-[60rem]">
         <div className="relative left-full">

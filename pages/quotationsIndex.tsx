@@ -4,6 +4,7 @@ import { useState  , ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import Popup from '@/components/popupReload';
 import PopupReload from '@/components/popupReload';
+import GenericLoading from '@/components/genericLoading';
 
 interface Value {
   id: string;
@@ -74,12 +75,15 @@ export default function QuotationsIndex( { values} : ResponseData ) {
   }
 
   const DeleteQuotation  =async (event: React.FormEvent , id : string) => {
+    setLoadindState(true)
     try {
       event.preventDefault();
+     
 
       const result  = await axios.delete(process.env.NEXT_PUBLIC_API_ENDPOINT+ "api/Quotations/api/quotation/deletequotation?Id=" +  id , { withCredentials : true}).then((response) =>{
         if(response.status === 200)
         {
+          debugger;
           setPopUpMessage("Quotation Delete Sucessfully")
           setRouteMessage("quotationsIndex");
     
@@ -91,13 +95,14 @@ export default function QuotationsIndex( { values} : ResponseData ) {
     } catch (error) {
       
     }
-    
+    setLoadindState(false)
   }
- 
+  const [loadingStateActive , setLoadindState] = useState(false);
 
   const GeneratePDF  =async (event: React.FormEvent , id : string , referenceNumber : string) => {
     debugger;
     event.preventDefault();
+    setLoadindState(true)
     try {
       const response = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+'api/Quotations/api/quotation/Generatepdf?q=' +  id, {
         responseType: 'arraybuffer',
@@ -121,12 +126,13 @@ export default function QuotationsIndex( { values} : ResponseData ) {
     } catch (error) {
       console.error(error);
     }
-    
+    setLoadindState(false)
   }
  
   return (
   
     <div className='w-px-[00px]'>   
+    <GenericLoading loadingSTST={loadingStateActive} />
     <PopupReload message={message}  route={routemessage} />
            <button type="button" onClick={PushToQuotations} className="fixed top-24 left-64  bg-blue-500 text-white rounded-md px-3 py-2 text-sm font-medium hover:bg-white hover:text-blue-500 hover:border border-blue-500">
               Create Quotation
