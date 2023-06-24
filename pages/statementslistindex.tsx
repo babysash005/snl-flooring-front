@@ -98,25 +98,34 @@ export default function QuotationsIndex({ values }: QuotationsIndexProps) {
     event.preventDefault();
     setLoadindState(true)
     try {
-      const response = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+'api/Statement/api/statement/Generatepdf?q=' +  id, {
-        responseType: 'arraybuffer',
-      });
-        debugger;
-      // Create a Blob from the response data
-      debugger;
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-  
-      // Generate a temporary URL for the Blob
-      const url = URL.createObjectURL(blob);
-  
-      // Trigger a file download using the temporary URL
+      
+      const url = process.env.NEXT_PUBLIC_API_ENDPOINT +"Home/StatementHTML?q=" + id;
       const link = document.createElement('a');
-      link.href = url;
-      link.download = referenceNumber +'.pdf';
-      link.click();
+    link.href = url;
+    link.download = referenceNumber +'.pdf';
+    link.target = '_blank';
+    link.click();
+
+
+      // const response = await axios.get(process.env.NEXT_PUBLIC_API_ENDPOINT+'api/Statement/api/statement/Generatepdf?q=' +  id, {
+      //   responseType: 'arraybuffer',
+      // });
+      //   debugger;
+      // // Create a Blob from the response data
+      // debugger;
+      // const blob = new Blob([response.data], { type: 'application/pdf' });
   
-      // Clean up the temporary URL
-      URL.revokeObjectURL(url);
+      // // Generate a temporary URL for the Blob
+      // const url = URL.createObjectURL(blob);
+  
+      // // Trigger a file download using the temporary URL
+      // const link = document.createElement('a');
+      // link.href = url;
+      // link.download = referenceNumber +'.pdf';
+      // link.click();
+  
+      // // Clean up the temporary URL
+      // URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
     }
